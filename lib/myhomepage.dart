@@ -334,7 +334,7 @@ class MyHomePage extends StatelessWidget {
                   child: Container(
                     margin: EdgeInsets.all(5),
                     padding: EdgeInsets.all(5),
-                    height: 150,
+                    height: 180,
                     child: Column(
                       children: [
                         Row(
@@ -391,6 +391,33 @@ class MyHomePage extends StatelessWidget {
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                               color: Colors.amber),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Center(
+                                  child: Text(
+                                   "FROM: "+ homecon.hotelModel[index].from.toString(),
+                                    style:
+                                    TextStyle(fontSize: 20, color: Colors.red),
+                                  )),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Center(
+                                  child: Text(
+                                     "TO: "+ homecon.hotelModel[index].to
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green))),
+                            )
+                          ],
                         ),
                         SizedBox(
                           height: 5,
