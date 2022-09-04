@@ -15,6 +15,9 @@ class MyHomePage extends StatelessWidget {
   final customername = TextEditingController();
   final seat = TextEditingController();
   final numer = TextEditingController();
+  final from = TextEditingController();
+  final to = TextEditingController();
+  final exacttime = TextEditingController();
   final firebase = FirebaseFirestore.instance;
 
   @override
@@ -74,6 +77,70 @@ class MyHomePage extends StatelessWidget {
                               counter: null,
                               counterText: "",
                               hintText: 'Customer Name',
+                              hintStyle: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                                height: 1.5,
+                              ),
+                            ),
+                            maxLength: 31,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
+                            textCapitalization: TextCapitalization.words,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: TextField(
+                            controller: from,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0),
+                              counter: null,
+                              counterText: "",
+                              hintText: 'From',
+                              hintStyle: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                                height: 1.5,
+                              ),
+                            ),
+                            maxLength: 31,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
+                            textCapitalization: TextCapitalization.words,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TextField(
+                            controller: to,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0),
+                              counter: null,
+                              counterText: "",
+                              hintText: 'To',
                               hintStyle: TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.bold,
@@ -190,23 +257,32 @@ class MyHomePage extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 1,
-                          child: GestureDetector(
-                            onTap: () async {
-                              controller.pickedTime.value =
-                                  (await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              ))
-                                      .toString();
-                            },
-                            child: Text(
-                              controller.pickedTime.value.isEmpty
-                                  ? controller.currenttime.value
-                                  : controller.pickedTime.value
-                                      .replaceAll("TimeOfDay()", ''),
-                              style: TextStyle(
-                                  fontSize: 34, fontWeight: FontWeight.bold),
+                          child: TextField(
+                            controller: exacttime,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0),
+                              counter: null,
+                              counterText: "",
+                              hintText: 'Exact Time',
+                              hintStyle: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                                height: 1.5,
+                              ),
                             ),
+                            maxLength: 31,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
+                            textCapitalization: TextCapitalization.words,
                           ),
                         ),
                       ],
@@ -222,8 +298,11 @@ class MyHomePage extends StatelessWidget {
                             "seatno": seat.text,
                             "number": numer.text,
                             "journey_date": controller.pickedDate.value,
-                            "journey_time": controller.pickedTime.value,
-                            "booking_time": controller.currentdate.value
+                            "journey_time": exacttime.text,
+                            'journey_from': from.text,
+                            'journey_to': to.text,
+                            "booking_time": controller.currentdate.value,
+                            'isdone': false
                           };
                           firebase
                               .collection("Booking")
@@ -294,12 +373,25 @@ class MyHomePage extends StatelessWidget {
                         ),
                         Center(
                           child: Text(
-                            "Journey: "+homecon.hotelModel[index].journey_date.toString(),
+                            "Journey: " +
+                                homecon.hotelModel[index].journey_date
+                                    .toString() +" "+
+                                "Time: " +
+                                homecon.hotelModel[index].time.toString(),
                             style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w700,color: Colors.green),
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.green),
                           ),
                         ),
-                        Text("Booking: "+homecon.hotelModel[index].booking_time.toString(),style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.amber),),
+                        Text(
+                          "Booking: " +
+                              homecon.hotelModel[index].booking_time.toString(),
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber),
+                        ),
                         SizedBox(
                           height: 5,
                         ),
@@ -321,7 +413,9 @@ class MyHomePage extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      launch("tel://"+homecon.hotelModel[index].number.toString());
+                                      launch("tel://" +
+                                          homecon.hotelModel[index].number
+                                              .toString());
                                     },
                                     child: Text(homecon.hotelModel[index].number
                                         .toString()),

@@ -14,7 +14,7 @@ class HomeController extends GetxController{
     super.onInit();
   }
 
-  Stream<List<Booking>> getAllBooking() => collectionReference
+  Stream<List<Booking>> getAllBooking() => collectionReference.where("isdone", isEqualTo: false)
       .snapshots()
       .map((event) => event.docs.map((e) => Booking.fromMap(e)).toList());
 
